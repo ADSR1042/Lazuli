@@ -1,0 +1,23 @@
+.body_tr.tr-conflit {
+    background-color: #ffb2b285 !important;
+}
+
+.body_tr.tr-conflit:hover {
+    background-color: #ffb2b285 !important;
+}
+
+.body_tr.tr-disable {
+    background-color: #c8c9c585 !important;
+}
+
+.body_tr.tr-disable:hover {
+    background-color: #c8c9c585 !important;
+}
+
+.body_tr.tr-enable {
+    background-color: #b2ffbd57 !important;
+}
+
+.body_tr.tr-enable:hover {
+    background-color: #b2ffbd57 !important;
+}
