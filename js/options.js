@@ -1,6 +1,6 @@
 //用于options.html页面的默认插件配置 会在加载后被loadConfig函数覆盖
 let globalConfig = {
-    enableDataExpirationReminders: true,
+    enableDataExpirationReminders: false,
     // enablelessonListAutoScroll: true,
 };
 

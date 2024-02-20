@@ -47,6 +47,12 @@ $(document).ready(async function () {
 				//获取本地存储的数据
 				localData = localStorage.getItem('search-data');
 				localTime = localStorage.getItem('search-last-update');
+
+				//如果获取为空  丢出错误
+				if (!localData || !localTime) {
+					throw new Error('获取数据失败');
+				}
+
 				console.log('模拟点击查老师搜索框获取数据');
 				console.log(localData);
 				console.log(localTime);
@@ -445,7 +451,7 @@ async function inital() {
 	//lessonListAutoScroll 默认为true 用于判断是否需要自动下拉
 	//打包成一个对象写入插件缓存 key名为config
 	await new Promise((resolve, reject) => {
-		chrome.storage.local.set({ 'config': { 'enableDataExpirationReminders': true, 'enableLessonListAutoScroll': true } }, function () {
+		chrome.storage.local.set({ 'config': { 'enableDataExpirationReminders': false, 'enableLessonListAutoScroll': true } }, function () {
 			console.log('配置已写入插件储存空间');
 			resolve(true);
 		});
