@@ -72,7 +72,6 @@ $(document).ready(async function () {
 		if (!localTime || new Date().getTime() - localTime > expireTime) {
 
 			if (globalConfig.enableDataExpirationReminders) {
-				debugger
 				desktop_notification('选课插件提示', '评分数据已过期，点击打开查老师页面更新评分', 20000, 'http://chalaoshi.de/');
 				//此处暂时不返回 避免影响后续代码执行
 				//全局变量 存一个needUpdate 用于判断是否需要更新数据
@@ -119,7 +118,6 @@ function startZDBKInject() {
 	observer.observe(targetNode, config);
 
 	//查找 id为#nextPage 的元素 如果存在 点他一下
-	// debugger
 	if ($('#nextPage').length > 0) {
 		//如果#nextpage元素存在href属性 移除href属性 避免chrome报错
 		if ($('#nextPage').attr('href')) {
@@ -186,7 +184,6 @@ function bindForgeClick() {
 
 
 function autoScroll() {
-	console.log('autoScroll');
 	const distanceToBottom = $(document).height() - $(window).height() - $(window).scrollTop();
 	// 如果#nextpage元素存在并且距离页面底部小于100px
 	if ($('#nextPage').length > 0 && distanceToBottom < 100) {
@@ -313,7 +310,7 @@ async function loadScoreData(element) {
 				allHTML = allHTML.split('<')[0];
 				//转成数字
 				let allPending = Number(allHTML);
-				
+
 
 				console.log('余量', rest);
 				console.log('本专业待定', majorPending);
@@ -321,16 +318,16 @@ async function loadScoreData(element) {
 
 				//按照所有待定的情况下的余量来设置颜色
 				//余量小于零的单独处理
-				if(rest <= 0){
+				if (rest <= 0) {
 					//给倒数第三个跟倒数第二个td元素加上无法选中
 					$(element).children('td').eq(-3).append('<br><span style="font-weight:bold; color: darkgray;">无法选中</span>');
 					$(element).children('td').eq(-2).append('<br><span style="font-weight:bold; color: darkgray;">无法选中</span>');
 				}
-				else{
+				else {
 					//先处理本专业待定的一栏 计算比例
 					let majorRate = majorPending / rest;
-					let majorRateHTMLColor = majorRate < 1 ? 'green' :  majorRate < 5 ? 'darkorange' : majorRate < 10 ? '#e60c0c' : 'black'; 
-					let majorRateText = majorRate < 1 ? '容易选中' :  majorRate < 5 ? '不易选中' : majorRate < 10 ? '难选中' : '极难选中';
+					let majorRateHTMLColor = majorRate < 1 ? 'green' : majorRate < 5 ? 'darkorange' : majorRate < 10 ? '#e60c0c' : 'black';
+					let majorRateText = majorRate < 1 ? '容易选中' : majorRate < 5 ? '不易选中' : majorRate < 10 ? '难选中' : '极难选中';
 					//构建一个html
 					let majorRateHTML = `<br><span style="font-weight: bold; color: ${majorRateHTMLColor};">「${majorRate.toFixed(2)} 进 1」<br>${majorRateText}</span>`
 					//插入到倒数第三个td元素内部 需要保留原本的html
@@ -338,8 +335,8 @@ async function loadScoreData(element) {
 
 					//处理全部待定的一栏 计算比例
 					let allRate = allPending / rest;
-					let allRateHTMLColor = allRate < 1 ? 'green' :  allRate < 5 ? 'darkorange' : allRate < 10 ? '#e60c0c' : 'black';
-					let allRateText = allRate < 1 ? '容易选中' :  allRate < 5 ? '不易选中' : allRate < 10 ? '难选中' : '极难选中';
+					let allRateHTMLColor = allRate < 1 ? 'green' : allRate < 5 ? 'darkorange' : allRate < 10 ? '#e60c0c' : 'black';
+					let allRateText = allRate < 1 ? '容易选中' : allRate < 5 ? '不易选中' : allRate < 10 ? '难选中' : '极难选中';
 					//构建一个html
 					let allRateHTML = `<br><span style="font-weight: bold; color: ${allRateHTMLColor};">「${allRate.toFixed(2)} 进 1」<br>${allRateText}</span>`
 					//插入到倒数第二个td元素内部 需要保留原本的html
@@ -420,7 +417,6 @@ async function inital() {
 	}
 	//执行初始化逻辑
 
-	debugger;
 	//加载json文件至chrome缓存 位置 /data/default.json
 	// 使用fetch加载json文件
 	const response = await fetch(chrome.runtime.getURL('/data/default.json'));
