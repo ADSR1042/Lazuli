@@ -1,4 +1,10 @@
-﻿$(document).ready(async function () {
+﻿let globalConfig = {
+	enableDataExpirationReminders: true,
+};
+
+
+
+$(document).ready(async function () {
 
 	//设定一个全局变量 数据过期时间
 	var expireTime = 1000 * 60 * 60 * 24 * 7; //7天
@@ -7,6 +13,9 @@
 
 	await inital();
 
+	let config = await loadConfig();
+	globalConfig = config.config;
+
 	//如果是查老师的根目录 即url为 chalaoshi.de 或者 http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
 	if (window.location.href == 'http://chalaoshi.de/' || window.location.href == 'http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/') {
 		//获取当前时间
@@ -14,33 +23,67 @@
 		// //获取本地存储的数据
 		let localData = localStorage.getItem('search-data');
 		let localTime = localStorage.getItem('search-last-update');
+		//localTime 字符串转数字
+		localTime = Number(localTime);
 		//如果本地存储的数据存在 并且没有过期
 		if (localData && nowTime - localTime < expireTime) {
 			//直接使用本地存储的数据
 			console.log('发现本地存储的数据');
-			updateChromeStorage(localData, localTime);
+			await updateChromeStorage(localData, localTime);
+			await getLocalData('needUpdate').then((result) => {
+				if (result && result.needUpdate) {
+					//这里提醒主要是为了符合逻辑  用户在打开zdbk的时候提示需要更新 提醒打开查老师后需要告知一次用户数据已经更新 实际上做的时候是次次更新
+					desktop_notification('选课插件提示', '检测到打开查老师，评分数据已更新', 10000);
+					//更新完毕后将needUpdate设置为false
+					chrome.storage.local.set({ 'needUpdate': false }, function () {
+						console.log('needUpdate已写入插件储存空间');
+					});
+				}
+			});
 		} else {
 			//如果过期了或者没有数据 模拟点击查老师搜索框获取数据 并再从本地存储中获取
-			await forgePrepareSearch();
-			//获取本地存储的数据
-			localData = localStorage.getItem('search-data');
-			localTime = localStorage.getItem('search-last-update');
-			console.log('模拟点击查老师搜索框获取数据');
-			console.log(localData);
-			console.log(localTime);
-			console.log('将页面存储的数据写入插件储存空间');
-			updateChromeStorage(localData, localTime);
-			desktop_notification('选课插件提示', '检测到打开查老师，评分数据已更新', 10000);
+			try {
+				await forgePrepareSearch();
+				//获取本地存储的数据
+				localData = localStorage.getItem('search-data');
+				localTime = localStorage.getItem('search-last-update');
+				console.log('模拟点击查老师搜索框获取数据');
+				console.log(localData);
+				console.log(localTime);
+				console.log('将页面存储的数据写入插件储存空间');
+				await updateChromeStorage(localData, localTime);
+				desktop_notification('选课插件提示', '检测到打开查老师，评分数据已更新', 10000);
+			}
+			catch (e) {
+				console.log('模拟点击查老师搜索框获取数据失败', e);
+				desktop_notification('选课插件提示', '检测到打开查老师，查老师未响应，请稍后再试', 10000);
+			}
 		}
 	}
 	//如果是zdbl选课页面 url包含 http://zdbk.zju.edu.cn/jwglxt/xsxk
 	else if (window.location.href.includes('http://zdbk.zju.edu.cn/jwglxt/xsxk')) {
 
-		let localTime = await getLocalData('search-last-update')['search-last-update'];
+		let localTime = await getLocalData('search-last-update');
+		localTime = localTime['search-last-update'];
+		//字符串转数字
+		localTime = Number(localTime);
+
 
 		if (!localTime || new Date().getTime() - localTime > expireTime) {
-			desktop_notification('选课插件提示', '评分数据已过期，点击打开查老师页面更新评分', 20000);
-			//此处暂时不返回 避免影响后续代码执行
+
+			if (globalConfig.enableDataExpirationReminders) {
+				debugger
+				desktop_notification('选课插件提示', '评分数据已过期，点击打开查老师页面更新评分', 20000, 'http://chalaoshi.de/');
+				//此处暂时不返回 避免影响后续代码执行
+				//全局变量 存一个needUpdate 用于判断是否需要更新数据
+				await new Promise((resolve, reject) => {
+					chrome.storage.local.set({ 'needUpdate': true }, function () {
+						console.log('needUpdate已写入插件储存空间');
+						resolve(true);
+					});
+				});
+			}
+
 		}
 
 
@@ -54,13 +97,9 @@
 
 	}
 
-	// desktop_notification('选课插件已启动', '选课插件已启动', 3000);
-
-
-
 });
 
-//封装chrome.storage.local.get 为promise
+//封装chrome.storage.local.get 为promise 这玩意很奇怪...包一层得了
 function getLocalData(key) {
 	return new Promise((resolve, reject) => {
 		chrome.storage.local.get(key, (result) => {
@@ -73,8 +112,6 @@ function getLocalData(key) {
 		});
 	});
 }
-
-
 
 
 function startZDBKInject() {
@@ -101,7 +138,6 @@ function startZDBKInject() {
 
 
 
-
 // 选择要观察变化的目标节点
 const targetNode = document.getElementById('contentBox');
 
@@ -122,13 +158,6 @@ const observer = new MutationObserver(function (mutations) {
 const config = { childList: true };
 
 
-
-
-
-//   // 在页面加载完成后，你可能还需要检查当前已存在的节点
-//   document.querySelectorAll('.table-hover').forEach((element) => {
-// 	yourBusinessLogic(element);
-//   });
 
 
 //为页面上所有选课pannel绑定点击事件 使得点击后修改dom
@@ -157,6 +186,7 @@ function bindForgeClick() {
 
 
 function autoScroll() {
+	console.log('autoScroll');
 	const distanceToBottom = $(document).height() - $(window).height() - $(window).scrollTop();
 	// 如果#nextpage元素存在并且距离页面底部小于100px
 	if ($('#nextPage').length > 0 && distanceToBottom < 100) {
@@ -277,18 +307,16 @@ async function loadScoreData(element) {
 
 }
 
-
-
-
-
-
-
+//把上面的函数改为promise
 function updateChromeStorage(localData, localTime) {
-	chrome.storage.local.set({
-		'search-data': localData,
-		'search-last-update': localTime
-	}, function () {
-		console.log('数据已写入插件储存空间');
+	return new Promise((resolve, reject) => {
+		chrome.storage.local.set({
+			'search-data': localData,
+			'search-last-update': localTime
+		}, function () {
+			console.log('数据已写入插件储存空间');
+			resolve(true);
+		});
 	});
 }
 
@@ -333,7 +361,7 @@ async function inital() {
 	//检查缓存中 isinit 是否为true
 	let result = await getLocalData('isinit');
 
-	if (result) {
+	if (result && result.isinit) {
 		console.log("插件已初始化")
 		return;
 	}
@@ -349,29 +377,78 @@ async function inital() {
 
 	//将json文件写入chrome缓存
 	console.log('加载json文件至chrome缓存', data);
-	chrome.storage.local.set({ 'search-data': JSON.stringify(data) }, function () {
-		console.log('数据已写入插件储存空间');
-		//写入数据时间 默认为0 强制用户更新
+
+	await new Promise((resolve, reject) => {
+		chrome.storage.local.set({ 'search-data': JSON.stringify(data) }, function () {
+			console.log('数据已写入插件储存空间');
+			resolve(true);
+		});
+	});
+	await new Promise((resolve, reject) => {
 		chrome.storage.local.set({ 'search-last-update': 0 }, function () {
 			console.log('数据时间已写入插件储存空间');
-			//设置isinit为true
-			chrome.storage.local.set({ 'isinit': true }, function () {
-				console.log('初始化成功');
-			});
+			resolve(true);
+		});
+	});
+
+	//然后写入插件配置项
+	//dataExpirationReminders 默认为true 用于判断是否需要提醒数据过期
+	//lessonListAutoScroll 默认为true 用于判断是否需要自动下拉
+	//打包成一个对象写入插件缓存 key名为config
+	await new Promise((resolve, reject) => {
+		chrome.storage.local.set({ 'config': { 'enableDataExpirationReminders': true, 'enableLessonListAutoScroll': true } }, function () {
+			console.log('配置已写入插件储存空间');
+			resolve(true);
+		});
+	});
+
+	await new Promise((resolve, reject) => {
+		chrome.storage.local.set({ 'isinit': true }, function () {
+			console.log('初始化成功');
+			resolve(true);
 		});
 	});
 
 }
 
+async function loadConfig() {
 
-function desktop_notification(title, data, closeTime = 3000) {
+	//用于防止爆炸的默认配置 按照正常启动流程应该不会用到 在init函数中必定写入
+	const defaultConfig = {
+		enableDataExpirationReminders: true,
+		lessonListAutoScroll: true,
+	};
+
+
+	//设置页加载时需要先加载配置
+	const config = await new Promise((resolve, reject) => {
+		chrome.storage.local.get('config', function (result) {
+			// console.log('配置已读取', result);
+			resolve(result);
+		});
+	});
+	console.log('配置', config);
+	//校验config是否为空对象
+	if (Object.keys(config).length === 0) {
+		//如果为空对象 使用默认配置 并丢出警告
+		console.warn('配置为空对象 使用默认配置');
+		return defaultConfig;
+	}
+	return config;
+
+}
+
+
+
+function desktop_notification(title, data, closeTime = 3000, url = "") {
 	//显示一个桌面通知
 	//由于content-script.js无法使用chrome.notifications 需要通过background.js来发送消息
 	chrome.runtime.sendMessage({
 		data: {
 			title: title,
 			message: data,
-			closeTime: closeTime
+			closeTime: closeTime,
+			url: url
 		}
 	}, function (response) {
 		console.log('收到来自后台的回复：' + response);

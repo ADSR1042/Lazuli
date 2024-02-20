@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "CourseForge",
+  "name": " Lazuli",
   "version": "1.0",
-  "description": "test",
+  "description": "开源版本浙江大学教务系统选课插件,支持离线/在线查老师评分数据显示,优化教务系统体验",
   "author": "ADSR1042",
   "icons": {
     "48": "icon.png",
@@ -18,8 +18,8 @@
       ],
       "js": [
         "lib/js/jquery.min.js",
-        "js/popup.js",
-        "js/content-script.js"
+        "js/content-script.js",
+        "js/popup.js"
       ],
       "css": [
         "lib/css/inject.css"
@@ -30,6 +30,7 @@
   "background": {
     "service_worker": "js/background.js"
   },
+  "options_page": "html/options.html",
   "permissions": [
     "notifications",
     "tabs",
@@ -40,7 +41,7 @@
   ],
   "action": {
     "default_icon": "icon.png",
-    "default_popup": "popup.html"
+    "default_popup": "html/popup.html"
   },
   "content_security_policy": {},
   "host_permissions": [
@@ -50,12 +51,20 @@
     "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
   ],
   "externally_connectable": {
-    "matches": ["*://zdbk.zju.edu.cn/*"]
+    "matches": [
+      "*://zdbk.zju.edu.cn/*"
+    ]
   },
   "web_accessible_resources": [
     {
-      "resources": [ "data/default.json" ],
-      "matches": [ "http://zdbk.zju.edu.cn/*" ]
+      "resources": [
+        "data/default.json"
+      ],
+      "matches": [
+        "http://zdbk.zju.edu.cn/*",
+        "http://chalaoshi.de/*",
+        "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
+      ]
     }
   ]
 }

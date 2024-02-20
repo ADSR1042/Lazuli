@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>插件Popup页面</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 20px;
+		}
+
+		.container {
+			min-width: 300px;
+			margin: 0 auto;
+			background-color: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			padding: 20px;
+		}
+
+		h1 {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.update-time {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.last-update-link {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		/* .setting-link {
+			display: block;
+			text-align: center;
+			color: #007bff;
+			text-decoration: none;
+			margin-top: 10px;
+		} */
+
+		.setting-link {
+			display: block;
+			text-align: center;
+			color: #fff;
+			background-color: #007bff;
+			text-decoration: none;
+			margin-top: 10px;
+			padding: 10px 20px;
+			border-radius: 5px;
+			transition: background-color 0.3s ease;
+		}
+
+		.setting-link:hover {
+			background-color: #0056b3;
+		}
+
+		.footer-links {
+			margin-top: 30px;
+			text-align: center;
+			display: flex;
+			display: flex;
+			justify-content: space-evenly;
+		}
+
+		.footer-links a {
+			display: block;
+			margin-bottom: 10px;
+			color: #007bff;
+			text-decoration: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>Lazuli</h1>
+		<p class="update-time">查老师数据更新时间：2024-02-17 12:00 PM</p>
+		<p class="last-update-link"><a href="https://chalaoshi.de" target="_blank">点此访问查老师以更新数据</a></p>
+		<a id="popup-setting" href="" class="setting-link">进入设置</a>
+		<div class="footer-links">
+			<a href="#">关于项目</a>
+			<a href="#">意见反馈</a>
+			<a href="#">使用帮助</a>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../js/popup.js"></script>
+
+</html>
