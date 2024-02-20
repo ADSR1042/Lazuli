@@ -292,6 +292,59 @@ async function loadScoreData(element) {
 				if (scoreHTML) {
 					$(element).children('td').eq(1).after('<td>' + scoreHTML + '</td>');
 				}
+
+				//计算选课难度
+				//获取倒数第六个td元素的html
+				let difficultyHTML = $(element).children('td').eq(-6).html();
+				console.log('选课难度', difficultyHTML);
+				//获取余量 即difficultyHTML 以/分割后的第一个元素
+				let rest = difficultyHTML.split('/')[0];
+				//转成数字
+				rest = Number(rest);
+				//获取本专业待定 倒数第三个td元素的html
+				let majorHTML = $(element).children('td').eq(-3).html();
+				//处理一下majorHTML 保留< 前面的部分 跟求是潮选课插件兼容
+				majorHTML = majorHTML.split('<')[0];
+				//转成数字
+				let majorPending = Number(majorHTML);
+				//获取全部待定 倒数第二个td元素的html
+				let allHTML = $(element).children('td').eq(-2).html();
+				//类似的处理一下allHTML
+				allHTML = allHTML.split('<')[0];
+				//转成数字
+				let allPending = Number(allHTML);
+				
+
+				console.log('余量', rest);
+				console.log('本专业待定', majorPending);
+				console.log('全部待定', allPending);
+
+				//按照所有待定的情况下的余量来设置颜色
+				//余量小于零的单独处理
+				if(rest <= 0){
+					//给倒数第三个跟倒数第二个td元素加上无法选中
+					$(element).children('td').eq(-3).append('<br><span style="font-weight:bold; color: darkgray;">无法选中</span>');
+					$(element).children('td').eq(-2).append('<br><span style="font-weight:bold; color: darkgray;">无法选中</span>');
+				}
+				else{
+					//先处理本专业待定的一栏 计算比例
+					let majorRate = majorPending / rest;
+					let majorRateHTMLColor = majorRate < 1 ? 'green' :  majorRate < 5 ? 'darkorange' : majorRate < 10 ? '#e60c0c' : 'black'; 
+					let majorRateText = majorRate < 1 ? '容易选中' :  majorRate < 5 ? '不易选中' : majorRate < 10 ? '难选中' : '极难选中';
+					//构建一个html
+					let majorRateHTML = `<br><span style="font-weight: bold; color: ${majorRateHTMLColor};">「${majorRate.toFixed(2)} 进 1」<br>${majorRateText}</span>`
+					//插入到倒数第三个td元素内部 需要保留原本的html
+					$(element).children('td').eq(-3).append(majorRateHTML);
+
+					//处理全部待定的一栏 计算比例
+					let allRate = allPending / rest;
+					let allRateHTMLColor = allRate < 1 ? 'green' :  allRate < 5 ? 'darkorange' : allRate < 10 ? '#e60c0c' : 'black';
+					let allRateText = allRate < 1 ? '容易选中' :  allRate < 5 ? '不易选中' : allRate < 10 ? '难选中' : '极难选中';
+					//构建一个html
+					let allRateHTML = `<br><span style="font-weight: bold; color: ${allRateHTMLColor};">「${allRate.toFixed(2)} 进 1」<br>${allRateText}</span>`
+					//插入到倒数第二个td元素内部 需要保留原本的html
+					$(element).children('td').eq(-2).append(allRateHTML);
+				}
 			}
 		});
 
@@ -320,7 +373,7 @@ function updateChromeStorage(localData, localTime) {
 	});
 }
 
-
+//查老师页面查询函数  照抄了一下查老师的查询函数 因为权限问题注入脚本没办法直接使用页面函数
 async function forgePrepareSearch() {
 	const search_version = 5;
 	const searchDataKey = "search-data";
@@ -356,7 +409,7 @@ async function forgePrepareSearch() {
 	}
 }
 
-//初始化函数
+//插件初始化函数
 async function inital() {
 	//检查缓存中 isinit 是否为true
 	let result = await getLocalData('isinit');
@@ -439,9 +492,8 @@ async function loadConfig() {
 }
 
 
-
+//系统通知接口函数
 function desktop_notification(title, data, closeTime = 3000, url = "") {
-	//显示一个桌面通知
 	//由于content-script.js无法使用chrome.notifications 需要通过background.js来发送消息
 	chrome.runtime.sendMessage({
 		data: {

@@ -16,14 +16,8 @@
         "http://chalaoshi.de/*",
         "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
       ],
-      "js": [
-        "lib/js/jquery.min.js",
-        "js/content-script.js",
-        "js/popup.js"
-      ],
-      "css": [
-        "lib/css/inject.css"
-      ],
+      "js": ["lib/js/jquery.min.js", "js/content-script.js"],
+      "css": ["lib/css/inject.css"],
       "run_at": "document_end"
     }
   ],
@@ -51,15 +45,11 @@
     "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
   ],
   "externally_connectable": {
-    "matches": [
-      "*://zdbk.zju.edu.cn/*"
-    ]
+    "matches": ["*://zdbk.zju.edu.cn/*"]
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "data/default.json"
-      ],
+      "resources": ["data/default.json"],
       "matches": [
         "http://zdbk.zju.edu.cn/*",
         "http://chalaoshi.de/*",
