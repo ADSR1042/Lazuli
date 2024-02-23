@@ -210,7 +210,14 @@ function autoScroll() {
 	}
 }
 
-async function loadScoreData(element) {
+async function loadScoreData(element,time = 0) {
+
+	if(time > 10){
+		//此处可能return的情况包括
+		//1.zdbk加载超时
+		//2.zdbk根本没有返回数据
+		return;
+	}
 
 	console.log('开始加载评分数据', element);
 	//延迟0.5秒 等待愚蠢的zdbk加载
@@ -224,6 +231,15 @@ async function loadScoreData(element) {
 		return;
 	}
 
+	//获取table下的tbody下的tr元素
+	let trs = $(table).find('tbody').children('tr');
+
+	if (trs.length == 0) {
+		console.log('trs为空 zdbk还在记载 再次调用loadScoreData');
+		loadScoreData(element,time + 1);
+		return;
+	}
+
 	// 获取本地存储的数据
 	chrome.storage.local.get('search-data', (localData) => {
 
@@ -234,20 +250,13 @@ async function loadScoreData(element) {
 		//table下thead的tr元素下面的第一个th元素后面插入一个th
 		$(table).find('thead').children('tr').children('th').eq(0).after('<th width="5%" >评分</th>');
 
-		//开始处理table下tbody的tr元素
-		let trs = $(table).find('tbody').children('tr');
-		//如果trs为空 再次调用loadScoreData
-		if (trs.length == 0) {
-			console.log('trs为空 zdbk还在记载 再次调用loadScoreData');
-			loadScoreData(element);
-			return;
-		}
+
 		//遍历每一个tr元素
 		trs.each(function (index, element) {
 			//如果tr没有id属性 则说明是课程错误 无教学班
 			if (!$(element).attr('id')) {
 				console.log('课程错误 无教学班');
-				//把tr下的第一个子元素td的colspan属性改为14 对其
+				//把tr下的第一个子元素td的colspan属性改为14 对齐
 				$(element).children('td').eq(0).attr('colspan', '14');
 			}
 			else {
