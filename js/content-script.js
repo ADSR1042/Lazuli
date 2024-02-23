@@ -17,7 +17,7 @@ $(document).ready(async function () {
 	globalConfig = config.config;
 
 	//如果是查老师的根目录 即url为 chalaoshi.de 或者 http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
-	if (window.location.href == 'http://chalaoshi.de/' || window.location.href == 'http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/') {
+	if (window.location.href == 'https://chalaoshi.de/' || window.location.href == 'http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/') {
 		//获取当前时间
 		let nowTime = new Date().getTime();
 		// //获取本地存储的数据

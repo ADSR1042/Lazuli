@@ -12,8 +12,8 @@
     {
       "matches": [
         "http://zdbk.zju.edu.cn/jwglxt/*",
-        "http://zdbk.zju.edu.cn:8080/jwglxt/*",
-        "http://chalaoshi.de/*",
+        "https://zdbk.zju.edu.cn/jwglxt/*",
+        "https://chalaoshi.de/*",
         "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
       ],
       "js": ["lib/js/jquery.min.js", "js/content-script.js"],
@@ -27,7 +27,6 @@
   "options_page": "html/options.html",
   "permissions": [
     "notifications",
-    "webRequest",
     "storage"
   ],
   "action": {
@@ -35,12 +34,6 @@
     "default_popup": "html/popup.html"
   },
   "content_security_policy": {},
-  "host_permissions": [
-    "http://zdbk.zju.edu.cn/*",
-    "http://zdbk.zju.edu.cn:8080/*",
-    "http://chalaoshi.de/*",
-    "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
-  ],
   "externally_connectable": {
     "matches": ["*://zdbk.zju.edu.cn/*"]
   },
@@ -49,7 +42,7 @@
       "resources": ["data/default.json"],
       "matches": [
         "http://zdbk.zju.edu.cn/*",
-        "http://chalaoshi.de/*",
+        "https://chalaoshi.de/*",
         "http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/*"
       ]
     }
