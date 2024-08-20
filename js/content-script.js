@@ -16,8 +16,8 @@ $(document).ready(async function () {
 	let config = await loadConfig();
 	globalConfig = config.config;
 
-	//如果是查老师的根目录 即url为 chalaoshi.de 或者 http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
-	if (window.location.href == 'https://chalaoshi.de/' || window.location.href == 'http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/') {
+	//如果是查老师的根目录 即url为 chalaoshi.buzz 或者 http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/ url需要完全匹配
+	if (window.location.href == 'https://chalaoshi.buzz/' || window.location.href == 'http://chalaoshi-de-s.webvpn.zju.edu.cn:8001/') {
 		//获取当前时间
 		let nowTime = new Date().getTime();
 		// //获取本地存储的数据
@@ -78,7 +78,7 @@ $(document).ready(async function () {
 		if (!localTime || new Date().getTime() - localTime > expireTime) {
 
 			if (globalConfig.enableDataExpirationReminders) {
-				desktop_notification('选课插件提示', '评分数据已过期，点击打开查老师页面更新评分', 20000, 'http://chalaoshi.de/');
+				desktop_notification('选课插件提示', '评分数据已过期，点击打开查老师页面更新评分', 20000, 'http://chalaoshi.buzz/');
 				//此处暂时不返回 避免影响后续代码执行
 				//全局变量 存一个needUpdate 用于判断是否需要更新数据
 				await new Promise((resolve, reject) => {
@@ -281,18 +281,18 @@ async function loadScoreData(element,time = 0) {
 
 						//如果评分大于8.5 设置为红色
 						if (parseFloat(res.rate) > 8.5) {
-							scoreHTML += '<a style="color:red;" href=https://chalaoshi.de/t/' + res.id + ' target="_blank" >' + res.rate + '</a><br>';
+							scoreHTML += '<a style="color:red;" href=https://chalaoshi.buzz/t/' + res.id + ' target="_blank" >' + res.rate + '</a><br>';
 						}
 						//如果评分小于2 设置为紫色
 						else if (parseFloat(res.rate) < 2) {
-							scoreHTML += '<a style="color:#4340ff;" href=https://chalaoshi.de/t/' + res.id + ' target="_blank" >' + res.rate + '</a><br>';
+							scoreHTML += '<a style="color:#4340ff;" href=https://chalaoshi.buzz/t/' + res.id + ' target="_blank" >' + res.rate + '</a><br>';
 						}
 						// 正常情况黑色
 						else {
-							scoreHTML += '<a style="color:black;" href=https://chalaoshi.de/t/' + res.id + ' target="_blank" >' + res.rate + '</a><br>';
+							scoreHTML += '<a style="color:black;" href=https://chalaoshi.buzz/t/' + res.id + ' target="_blank" >' + res.rate + '</a><br>';
 						}
 
-						// scoreHTML += `<a style={color:} href=https://chalaoshi.de/t/${res.id}>` + res.rate + '</a> <br>';
+						// scoreHTML += `<a style={color:} href=https://chalaoshi.buzz/t/${res.id}>` + res.rate + '</a> <br>';
 					}
 					//如果没有评分
 					else {
