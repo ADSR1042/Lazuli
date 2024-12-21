@@ -13,8 +13,8 @@
       "matches": [
         "http://zdbk.zju.edu.cn/jwglxt/*",
         "https://zdbk.zju.edu.cn/jwglxt/*",
-        "https://chalaoshi.buzz/*",
-        "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/*"
+        "https://chalaoshi.click/*",
+        "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/*"
       ],
       "js": ["lib/js/jquery.min.js", "js/content-script.js"],
       "css": ["lib/css/inject.css"],
@@ -42,8 +42,8 @@
       "resources": ["data/default.json"],
       "matches": [
         "http://zdbk.zju.edu.cn/*",
-        "https://chalaoshi.buzz/*",
-        "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/*"
+        "https://chalaoshi.click/*",
+        "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/*"
       ]
     }
   ]
