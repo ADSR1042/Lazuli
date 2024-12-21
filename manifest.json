@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": " Lazuli",
+  "name": "Lazuli",
   "version": "1.0.3",
   "description": "开源版本浙江大学教务系统选课插件,支持离线/在线查老师评分数据显示,优化教务系统体验",
   "author": "ADSR1042",
@@ -21,10 +21,11 @@
       "run_at": "document_end"
     }
   ],
-  "background": {
-    "service_worker": "js/background.js"
-  },
   "options_page": "html/options.html",
+  "options_ui": {
+  "page": "html/options.html",
+  "open_in_tab": true
+},
   "permissions": [
     "notifications",
     "storage"
@@ -46,5 +47,11 @@
         "http://chalaoshi-buzz-s.webvpn.zju.edu.cn:8001/*"
       ]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "Lazuli@adsr.me",
+      "strict_min_version": "109.0"
+    }
+  }
 }
