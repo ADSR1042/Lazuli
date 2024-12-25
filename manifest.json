@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Lazuli",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "开源版本浙江大学教务系统选课插件,支持离线/在线查老师评分数据显示,优化教务系统体验",
   "author": "ADSR1042",
   "icons": {
@@ -12,15 +12,16 @@
     {
       "matches": [
         "http://zdbk.zju.edu.cn/jwglxt/*",
-        "https://zdbk.zju.edu.cn/jwglxt/*",
-        "https://chalaoshi.click/*",
-        "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/*"
+        "https://zdbk.zju.edu.cn/jwglxt/*"
       ],
-      "js": ["lib/js/jquery.min.js", "js/content-script.js"],
+      "js": ["lib/js/jquery.min.js", "js/util.js","js/content-script.js"],
       "css": ["lib/css/inject.css"],
       "run_at": "document_end"
     }
   ],
+  "background": {
+    "service_worker": "js/background.js"
+  },
   "options_page": "html/options.html",
   "options_ui": {
   "page": "html/options.html",
@@ -42,9 +43,7 @@
     {
       "resources": ["data/default.json"],
       "matches": [
-        "http://zdbk.zju.edu.cn/*",
-        "https://chalaoshi.click/*",
-        "http://chalaoshi-click-s.webvpn.zju.edu.cn:8001/*"
+        "http://zdbk.zju.edu.cn/*"
       ]
     }
   ],
