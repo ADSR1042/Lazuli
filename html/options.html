@@ -1,138 +1,13 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lazuli 设置</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="../icon.png" type="image/png">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .radio {
-            position: relative;
-            width: 20.8px;
-            height: 20.8px;
-            background-clip: border-box;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            margin: -.15px .6px 0 0;
-            vertical-align: text-bottom;
-            border-radius: 50%;
-            background-color: #fff;
-            border: 1.3px solid #d7d7d7
-        }
-
-        .radio:before {
-            content: '';
-            display: block;
-            height: 0;
-            width: 0;
-            -webkit-transition: width .25s, height .25s;
-            transition: width .25s, height .25s
-        }
-
-        .radio:disabled {
-            opacity: .65
-        }
-
-        .radio:checked {
-            border: 1.3px solid #4a8cf7;
-            background-color: #fff
-        }
-
-        .radio:checked:before {
-            height: 10.4px;
-            width: 10.4px;
-            border-radius: 50%;
-            margin: 3.9px 0 0 3.9px;
-            background-color: #4a8cf7
-        }
-
-        .radio:focus {
-            outline: none;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.075), 0 0 2px #38a7ff
-        }
-
-
-
-        .switch {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            position: relative;
-            width: 41px;
-            height: 24px;
-            border: 1px solid #dfdfdf;
-            outline: 0;
-            border-radius: 16px;
-            box-sizing: border-box;
-            background: #dfdfdf
-        }
-
-        .switch:before,
-        .switch:after {
-            content: " ";
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 15px;
-            -webkit-transition: -webkit-transform .3s;
-            transition: -webkit-transform .3s;
-            transition: transform .3s;
-            transition: transform .3s, -webkit-transform .3s
-        }
-
-        .switch:before {
-            width: 39px;
-            height: 22px;
-            background-color: #d3d3d3
-        }
-
-        .switch:after {
-            width: 22px;
-            height: 22px;
-            background-color: #fff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4)
-        }
-
-        .switch:checked {
-            border-color: #4a8cf7;
-            background-color: #4a8cf7
-        }
-
-        .switch:checked:before {
-            -webkit-transform: scale(0);
-            transform: scale(0)
-        }
-
-        .switch:checked:after {
-            -webkit-transform: translateX(17px);
-            transform: translateX(17px)
-        }
-
-        .switch:checked:focus {
-            outline: 0
-        }
-
-        .switch:disabled {
-            opacity: .65
-        }
-
-        html,
-        body {
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            background-color: #eee
-        }
-
-        #option {
-            padding: 0 10%;
-            margin: auto;
-            max-width: 840px;
-            margin: 0 auto;
-            box-shadow: 0 0 50px #c8c8c8;
-            background-color: #fff
-        }
-
         header {
             width: 100%;
             height: 25%;
@@ -141,33 +16,8 @@
             font-weight: bold;
             color: #4a8cf7;
             display: flex;
-            align-items: center
-        }
-
-        .row {
-            display: flex;
             align-items: center;
-            justify-content: space-between;
-            line-height: 4em;
-            margin: 3% 5%;
-            flex: 1 1
-        }
-
-        .column {
-            display: flex;
-            align-items: center;
-            min-width: 30%;
-            max-width: 70%
-        }
-
-        .setting-title {
-            font-size: large;
-            font-weight: bold
-        }
-
-        .space {
-            display: inline-block;
-            width: 5px
+            justify-content: center;
         }
 
         footer {
@@ -179,56 +29,132 @@
 </head>
 
 <body>
-    <div id="option">
-        <header>
-            <img src="../icon.png">
-            <span class="space"></span>
-            <span class="space"></span>
-            Lazuli 设置
-        </header>
-        <div class="content">
-            <label for="general-settings" class="setting-title" >通用设置</label>
-            <div id="other-settings">
-                <div class="row">
-                    <div class="column">
-                        <input type="checkbox" 
-                            class="switch" id="enable-data-expiration-reminders">
-                        <span class="space"></span>
-                        <label for="select-translate" class="checked-label">启用查老师数据过期更新提醒</label>
+    <div class="container mt-5">
+        <!-- 顶部图片 -->
+        <div class="text-center mb-4">
+            <header>
+                <img src="../icon.png">
+                <span class="space"></span>
+                <span class="space"></span>
+                Lazuli 设置
+            </header>
+        </div>
+
+        <!-- <h1 class="mb-4">设置管理</h1> -->
+
+        <!-- 通用设置模块 -->
+        <div class="mb-5">
+            <h2 class="mb-3">通用设置</h2>
+
+            <!-- 查老师网址设置 -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="chaLaoShiUrl" class="form-label">查老师网址</label>
+                        <input type="text" class="form-control" id="chaLaoShiUrl" placeholder="请输入查老师的网址，必须包含http符">
+                        <div class="invalid-feedback">请输入有效的网址。</div>
+                        <small class="form-text text-muted">此设置项用于选课时打开查老师评论页，当查老师域名更改时请修改本项</small>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="saveSettingsGeneral">保存设置</button>
+                        <div id="saveSettingsGeneralFeedback" class="mt-3 d-none">
+                            <div class="alert alert-success" role="alert">
+                                设置已成功保存！
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="column">
-                        <input type="checkbox" 
-                            class="switch" id="enable-lesson-list-auto-scroll">
-                        <span class="space"></span>
-                        <label for="select-translate" class="checked-label">启用课程列表自动翻页</label>
-                    </div>
-                </div> -->
-                <!-- <div class="row">
-                    <div class="column">
-                        <input type="checkbox" setting-type="switch" setting-path="OtherSettings UsePDFjs"
-                            class="switch" id="use-pdf-js">
-                        <span class="space"></span>
-                        <label for="use-pdf-js" class="checked-label">使用内置的pdf查看器</label>
-                    </div>
-                </div> -->
             </div>
         </div>
-        <footer>
-            ©2024
-            <a href="" target="_blank">
-                Lazuli
-            </a>
-            <span class="space"></span>
-            By
-            <a href="https://blog.adsr.me" target="_blank"> ADSR </a>
-        </footer>
+
+
+
+        <!-- 数据设置模块 -->
+        <div class="mb-5">
+            <h2 class="mb-3">数据设置</h2>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <!-- 第一组大Radio: 在线获取数据 -->
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="dataMethod" id="online"
+                                        value="online">
+                                    <label class="form-check-label" for="online">
+                                        在线获取查老师数据
+                                    </label>
+                                </div>
+
+                                <!-- 更新频率选择 -->
+                                <div id="onlineOptions" class="d-none">
+                                    <div class="mb-3">
+                                        <label for="scoreDataExpirationTime" class="form-label">更新频率</label>
+                                        <select class="form-select" id="scoreDataExpirationTime">
+                                            <option value="7">每周</option>
+                                            <option value="30">每月</option>
+                                            <option value="never">从不</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- 数据源地址输入 -->
+                                    <div class="mb-3">
+                                        <label for="scoreDateUrl" class="form-label">数据源地址</label>
+                                        <input type="text" class="form-control" id="scoreDateUrl"
+                                            placeholder="请输入数据源地址，必须包含http符">
+                                        <div class="invalid-feedback">请输入有效的网址。</div>
+                                        <small class="form-text text-muted">此设置项用于自动更新数据</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 第二组大Radio: 手动加载数据 -->
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="dataMethod" id="manual"
+                                        value="manual">
+                                    <label class="form-check-label" for="manual">
+                                        手动加载查老师数据
+                                    </label>
+                                </div>
+
+                                <!-- 上传框 -->
+                                <div id="manualOptions" class="d-none">
+                                    <label for="scoreDataUpload" class="form-label">上传数据文件</label>
+                                    <input class="form-control" type="file" id="scoreDataUpload">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn btn-primary" id="saveSettingsScoreData">保存设置</button>
+                        <div id="saveSettingsScoreDataFeedback" class="mt-3 d-none">
+                            <div class="alert alert-success" role="alert">
+                                设置已成功保存！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
     </div>
-
-
+    <script src="../js/util.js"></script>
     <script src="../js/options.js"></script>
-
+    <footer>
+        ©2024
+        <a href="" target="_blank">
+            Lazuli
+        </a>
+        <span class="space"></span>
+        By
+        <a href="https://blog.adsr.me" target="_blank"> ADSR </a>
+    </footer>
 </body>
 
 </html>
