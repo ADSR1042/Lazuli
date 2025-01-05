@@ -14,12 +14,14 @@ const defaultConfig = {
 async function loadConfig() {
 
     //设置页加载时需要先加载配置
-    const config = await loadExtensionStorage('config');
+    let config = await loadExtensionStorage('config');
     console.log('配置', config);
     //校验config是否为空对象
     if (!config || Object.keys(config).length === 0) {
         //如果为空对象 使用默认配置 并丢出警告
         console.warn('配置为空对象 使用默认配置');
+        //并写入
+        await saveExtensionStorage('config', defaultConfig);
         return defaultConfig;
     }
 
