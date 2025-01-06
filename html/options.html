@@ -31,7 +31,7 @@
 <body>
     <div class="container mt-5">
         <!-- 顶部图片 -->
-        <div class="text-center mb-4">
+        <div class="text-center py-5">
             <header>
                 <img src="../icon.png">
                 <span class="space"></span>
@@ -39,122 +39,164 @@
                 Lazuli 设置
             </header>
         </div>
-
-        <!-- <h1 class="mb-4">设置管理</h1> -->
-
-        <!-- 通用设置模块 -->
-        <div class="mb-5">
-            <h2 class="mb-3">通用设置</h2>
-
-            <!-- 查老师网址设置 -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="chaLaoShiUrl" class="form-label">查老师网址</label>
-                        <input type="text" class="form-control" id="chaLaoShiUrl" placeholder="请输入查老师的网址，必须包含http符">
-                        <div class="invalid-feedback">请输入有效的网址。</div>
-                        <small class="form-text text-muted">此设置项用于选课时打开查老师评论页，当查老师域名更改时请修改本项</small>
+        <div class="row">
+            <div class="col-md-8 offset-md-2 col-lg-8 offset-lg-2">
+                <!-- 通用设置模块 -->
+                <div class="mb-5">
+                    <h2 class="mb-3">通用设置</h2>
+                    <!-- 查老师网址设置 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="chaLaoShiUrl" class="form-label">查老师网址</label>
+                                <input type="text" class="form-control" id="chaLaoShiUrl"
+                                    placeholder="请输入查老师的网址，必须包含http符">
+                                <div class="invalid-feedback">请输入有效的网址。</div>
+                                <small class="form-text text-muted">此设置项用于选课时打开查老师评论页，当查老师域名更改时请修改本项</small>
+                                <div></div>
+                                <small class="form-text text-muted">可以
+                                    <a href="https://github.com/zjuchalaoshi/chalaoshi">点此</a>
+                                    查询最新的查老师域名，需要科学上网</small>
+                            </div>
+                            <div class="text-start">
+                                <button class="btn btn-primary" id="saveSettingsGeneral">保存设置</button>
+                                <div id="saveSettingsGeneralFeedback" class="mt-3 d-none">
+                                    <div class="alert alert-success text-center" role="alert">
+                                        设置已成功保存！
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-center">
-                        <button class="btn btn-primary" id="saveSettingsGeneral">保存设置</button>
-                        <div id="saveSettingsGeneralFeedback" class="mt-3 d-none">
-                            <div class="alert alert-success" role="alert">
-                                设置已成功保存！
+                </div>
+                <!-- 数据设置模块 -->
+                <div class="mb-5">
+                    <h2 class="mb-3">数据设置</h2>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <!-- 第一组大Radio: 在线获取数据 -->
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="radio" name="dataMethod" id="online"
+                                                value="online">
+                                            <label class="form-check-label" for="online">
+                                                在线获取查老师数据
+                                            </label>
+                                        </div>
+
+                                        <!-- 更新频率选择 -->
+                                        <div id="onlineOptions" class="d-none">
+                                            <div class="mb-3">
+                                                <label for="scoreDataExpirationTime" class="form-label">更新频率</label>
+                                                <select class="form-select" id="scoreDataExpirationTime">
+                                                    <option value="7">每周</option>
+                                                    <option value="30">每月</option>
+                                                    <option value="never">从不</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 数据源地址输入 -->
+                                            <div class="mb-3">
+                                                <label for="scoreDateUrl" class="form-label">数据源地址</label>
+                                                <input type="text" class="form-control" id="scoreDateUrl"
+                                                    placeholder="请输入数据源地址，必须包含http符">
+                                                <div class="invalid-feedback">请输入有效的网址。</div>
+                                                <small class="form-text text-muted">此设置项用于自动更新数据</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 第二组大Radio: 手动加载数据 -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-check mb-3">
+                                            <input class="form-check-input" type="radio" name="dataMethod" id="manual"
+                                                value="manual">
+                                            <label class="form-check-label" for="manual">
+                                                手动加载查老师数据
+                                            </label>
+                                        </div>
+
+                                        <!-- 上传框 -->
+                                        <div id="manualOptions" class="d-none">
+                                            <label for="scoreDataUpload" class="form-label">上传数据文件</label>
+                                            <input class="form-control" type="file" id="scoreDataUpload">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-start">
+                                <button class="btn btn-primary" id="saveSettingsScoreData">保存设置</button>
+                                <div id="saveSettingsScoreDataFeedback" class="mt-3 d-none">
+                                    <div class="alert alert-success text-center" role="alert">
+                                        设置已成功保存！
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 重置设置模块 -->
+                <div class="mb-5">
+                    <h2 class="mb-3">重置设置</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="text-start">
+                                <button class="btn btn-danger " id="resetSettings">重置设置</button>
+                                <div id="resetSettingsFeedback" class="mt-3 d-none">
+                                    <div class="alert alert-warning text-center" role="alert">
+                                        重置设置将会清空所有设置项，确定要继续吗？
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal" id="resetSettingsConfirmModal" data-bs-backdrop="static"
+                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="resetSettingsConfirmModalLabel">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="resetSettingsConfirmModalLabel">Modal title
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        你确定要重置设置吗？此操作不可撤销
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            id="resetSettingsConfirmModalCancel">取消</button>
+                                        <button type="button" class="btn btn-danger"
+                                            id="resetSettingsConfirmModalConfirm">确定</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-        <!-- 数据设置模块 -->
-        <div class="mb-5">
-            <h2 class="mb-3">数据设置</h2>
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-3">
-                        <!-- 第一组大Radio: 在线获取数据 -->
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="dataMethod" id="online"
-                                        value="online">
-                                    <label class="form-check-label" for="online">
-                                        在线获取查老师数据
-                                    </label>
-                                </div>
-
-                                <!-- 更新频率选择 -->
-                                <div id="onlineOptions" class="d-none">
-                                    <div class="mb-3">
-                                        <label for="scoreDataExpirationTime" class="form-label">更新频率</label>
-                                        <select class="form-select" id="scoreDataExpirationTime">
-                                            <option value="7">每周</option>
-                                            <option value="30">每月</option>
-                                            <option value="never">从不</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- 数据源地址输入 -->
-                                    <div class="mb-3">
-                                        <label for="scoreDateUrl" class="form-label">数据源地址</label>
-                                        <input type="text" class="form-control" id="scoreDateUrl"
-                                            placeholder="请输入数据源地址，必须包含http符">
-                                        <div class="invalid-feedback">请输入有效的网址。</div>
-                                        <small class="form-text text-muted">此设置项用于自动更新数据</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 第二组大Radio: 手动加载数据 -->
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" type="radio" name="dataMethod" id="manual"
-                                        value="manual">
-                                    <label class="form-check-label" for="manual">
-                                        手动加载查老师数据
-                                    </label>
-                                </div>
-
-                                <!-- 上传框 -->
-                                <div id="manualOptions" class="d-none">
-                                    <label for="scoreDataUpload" class="form-label">上传数据文件</label>
-                                    <input class="form-control" type="file" id="scoreDataUpload">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center">
-                        <button class="btn btn-primary" id="saveSettingsScoreData">保存设置</button>
-                        <div id="saveSettingsScoreDataFeedback" class="mt-3 d-none">
-                            <div class="alert alert-success" role="alert">
-                                设置已成功保存！
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-
-    </div>
-    <script src="../js/util.js"></script>
-    <script src="../js/options.js"></script>
-    <footer>
-        ©2024
-        <a href="" target="_blank">
-            Lazuli
-        </a>
-        <span class="space"></span>
-        By
-        <a href="https://blog.adsr.me" target="_blank"> ADSR </a>
-    </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script src="../js/util.js"></script>
+        <script src="../js/options.js"></script>
+        <footer>
+            ©
+            <span id="year">
+                2025
+            </span>
+            <a href="" target="_blank">
+                Lazuli
+            </a>
+            <span class="space"></span>
+            By
+            <a href="https://blog.adsr.me" target="_blank"> ADSR </a>
+        </footer>
 </body>
 
 </html>

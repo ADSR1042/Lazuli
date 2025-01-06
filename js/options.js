@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     const saveFeedbackGeneral = document.getElementById('saveSettingsGeneralFeedback');
     const saveFeedbackScoreData = document.getElementById('saveSettingsScoreDataFeedback');
     const scoreDataUpload = document.getElementById('scoreDataUpload');
+    const resetButton = document.getElementById('resetSettings');
+    // const resetSettingConfirmModal = new bootstrap.Modal(document.getElementById('resetSettingsConfirmModal'));
+    const resetSettingsConfirmModal = bootstrap.Modal.getOrCreateInstance('#resetSettingsConfirmModal');
+    const resetSettingsConfirmModalCancel = document.getElementById("resetSettingsConfirmModalCancel")
+    const resetSettingsConfirmModalConfirm = document.getElementById("resetSettingsConfirmModalConfirm")
+    const year = document.getElementById("year")
+
+
+    await initalExtension()
 
     //加载配置
     const config = await loadConfig();
@@ -57,17 +66,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             manualOptions.classList.remove('d-none');
             onlineOptions.classList.add('d-none');
         }
+        saveFeedbackScoreData.classList.add('d-none')
     }
 
     function handleFileUpload(event) {
         const file = event.target.files[0];
-
+        saveFeedbackScoreData.classList.add('d-none')
         if (file) {
             const reader = new FileReader();
 
             reader.onload = function (e) {
                 fileCache = e.target.result;
                 console.log(fileCache);
+                try {
+                    JSON.parse(fileCache)
+                }
+                catch (e) {
+                    saveFeedbackScoreData.classList.remove('d-none')
+                    saveFeedbackScoreData.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
+                    saveFeedbackScoreData.querySelector('.alert').textContent = '文件格式错误！';
+                    return;
+                }
+
                 if (!checkScoreData(JSON.parse(fileCache))) {
                     saveFeedbackScoreData.classList.remove('d-none')
                     saveFeedbackScoreData.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
@@ -104,6 +124,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     saveGeneralButton.addEventListener('click', saveConfigGeneral);
     saveScoreDataButton.addEventListener('click', saveConfigScoreData);
     scoreDataUpload.addEventListener('change', handleFileUpload);
+    resetButton.addEventListener('click', () => resetSettingsConfirmModal.show());
+    resetSettingsConfirmModalCancel.addEventListener('click', () => resetSettingsConfirmModal.hide());
+    resetSettingsConfirmModalConfirm.addEventListener('click', () => {
+        chrome.storage.local.clear();
+        resetSettingsConfirmModal.hide()
+        window.scrollTo(0, 0)
+        location.reload();
+    });
+    year.innerText =  new Date().getFullYear();
 });
 
 
@@ -121,7 +150,7 @@ async function saveConfigGeneral() {
     }
     let config = await loadConfig();
     config.chaLaoShiUrl = teacherWebsiteInput.value;
-    console.log("新保存的的",config);
+    console.log("新保存的的", config);
     await saveExtensionStorage('config', config);
     saveFeedback.classList.remove('d-none');
     saveFeedback.querySelector('.alert').textContent = '设置已成功保存！';
@@ -152,7 +181,18 @@ async function saveConfigScoreData() {
         saveFeedback.querySelector('.alert').textContent = '手动上传文件不能为空！';
         return;
     }
-    if(manualDataRadio.checked && !checkScoreData(JSON.parse(fileCache))){
+    if (manualDataRadio.checked && !fileCache) {
+        try {
+            JSON.parse(fileCache)
+        }
+        catch (e) {
+            saveFeedback.classList.remove('d-none')
+            saveFeedback.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
+            saveFeedback.querySelector('.alert').textContent = '文件格式错误！';
+            return;
+        }
+    }
+    if (manualDataRadio.checked && !checkScoreData(JSON.parse(fileCache))) {
         saveFeedback.classList.remove('d-none')
         saveFeedback.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
         saveFeedback.querySelector('.alert').textContent = '文件格式错误！';
@@ -182,5 +222,15 @@ async function saveConfigScoreData() {
     }
     await saveExtensionStorage('config', config);
     saveFeedback.classList.remove('d-none');
+    saveFeedback.querySelector('.alert').classList.replace('alert-danger', 'alert-success');
     saveFeedback.querySelector('.alert').textContent = '设置已成功保存！';
 }
+
+//糊弄一下报错
+document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener('hide.bs.modal', function (event) {
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+    });
+});
