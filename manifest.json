@@ -4,6 +4,7 @@
   "version": "1.1.2",
   "description": "开源版本浙江大学教务系统选课插件,支持离线/在线查老师评分数据显示,优化教务系统体验",
   "author": "ADSR1042",
+  "default_locale": "zh_CN",
   "icons": {
     "48": "icon.png",
     "128": "icon.png"
