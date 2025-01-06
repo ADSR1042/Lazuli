@@ -19,7 +19,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     const resetSettingsConfirmModal = bootstrap.Modal.getOrCreateInstance('#resetSettingsConfirmModal');
     const resetSettingsConfirmModalCancel = document.getElementById("resetSettingsConfirmModalCancel")
     const resetSettingsConfirmModalConfirm = document.getElementById("resetSettingsConfirmModalConfirm")
+    const year = document.getElementById("year")
 
+
+    await initalExtension()
 
     //加载配置
     const config = await loadConfig();
@@ -63,17 +66,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             manualOptions.classList.remove('d-none');
             onlineOptions.classList.add('d-none');
         }
+        saveFeedbackScoreData.classList.add('d-none')
     }
 
     function handleFileUpload(event) {
         const file = event.target.files[0];
-
+        saveFeedbackScoreData.classList.add('d-none')
         if (file) {
             const reader = new FileReader();
 
             reader.onload = function (e) {
                 fileCache = e.target.result;
                 console.log(fileCache);
+                try {
+                    JSON.parse(fileCache)
+                }
+                catch (e) {
+                    saveFeedbackScoreData.classList.remove('d-none')
+                    saveFeedbackScoreData.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
+                    saveFeedbackScoreData.querySelector('.alert').textContent = '文件格式错误！';
+                    return;
+                }
+
                 if (!checkScoreData(JSON.parse(fileCache))) {
                     saveFeedbackScoreData.classList.remove('d-none')
                     saveFeedbackScoreData.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
@@ -115,9 +129,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     resetSettingsConfirmModalConfirm.addEventListener('click', () => {
         chrome.storage.local.clear();
         resetSettingsConfirmModal.hide()
-        window.scrollTo(0,0)
+        window.scrollTo(0, 0)
         location.reload();
     });
+    year.innerText =  new Date().getFullYear();
 });
 
 
@@ -166,6 +181,17 @@ async function saveConfigScoreData() {
         saveFeedback.querySelector('.alert').textContent = '手动上传文件不能为空！';
         return;
     }
+    if (manualDataRadio.checked && !fileCache) {
+        try {
+            JSON.parse(fileCache)
+        }
+        catch (e) {
+            saveFeedback.classList.remove('d-none')
+            saveFeedback.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
+            saveFeedback.querySelector('.alert').textContent = '文件格式错误！';
+            return;
+        }
+    }
     if (manualDataRadio.checked && !checkScoreData(JSON.parse(fileCache))) {
         saveFeedback.classList.remove('d-none')
         saveFeedback.querySelector('.alert').classList.replace('alert-success', 'alert-danger');
@@ -196,6 +222,7 @@ async function saveConfigScoreData() {
     }
     await saveExtensionStorage('config', config);
     saveFeedback.classList.remove('d-none');
+    saveFeedback.querySelector('.alert').classList.replace('alert-danger', 'alert-success');
     saveFeedback.querySelector('.alert').textContent = '设置已成功保存！';
 }
 

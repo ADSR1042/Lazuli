@@ -114,6 +114,50 @@ async function fetchScoreData(url) {
     }
 }
 
+/**
+ * 初始化
+ */
+
+/**
+ * 初始化函数
+ */
+
+//插件初始化函数
+async function initalExtension() {
+    //检查缓存中 isinit 是否为true
+    let isinit = await loadExtensionStorage('isinit');
+    if (isinit) {
+        console.log("插件已初始化")
+        return;
+    }
+    //执行初始化逻辑
+
+    //先检查一下有没有数据
+    let dataAlready = await loadExtensionStorage('search-data')
+
+    if (!dataAlready) {
+        //加载json文件至chrome缓存 位置 /data/default.json
+        // 使用fetch加载json文件
+        const response = await fetch(chrome.runtime.getURL('/data/default.json'));
+        const data = await response.json();
+        //这里没做错误处理 请求自己本地的json如果还能出错那是真的🐂🍺
+
+        //将json文件写入chrome缓存
+        console.log('加载默认数据至chrome缓存', data);
+        await saveExtensionStorage('search-data', data);
+        await saveExtensionStorage('search-last-update', 0);
+    }
+
+    let configAlready = await loadExtensionStorage('config')
+    if (!configAlready) {
+        //然后写入插件配置项
+        await saveExtensionStorage('config', defaultConfig);
+    }
+    await saveExtensionStorage('isinit', true);
+
+}
+
+
 
 /**
  * 其他函数
