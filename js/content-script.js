@@ -15,7 +15,7 @@ $(document).ready(async function () {
 
     scoreData = await loadExtensionStorage('search-data');
 
-    if (window.location.href.includes('http://zdbk.zju.edu.cn/jwglxt/xsxk')) {
+    if (window.location.href.includes('http://zdbk.zju.edu.cn/jwglxt/xsxk') || window.location.href.includes('https://zdbk.zju.edu.cn/jwglxt/xsxk')) {
 
         //启用数据自动更新 
         //理论上启用自动更新与手动指定数据互斥 代码实现上启用自动更新时会覆盖手动指定数据
